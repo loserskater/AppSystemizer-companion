@@ -1,4 +1,4 @@
-package com.loserskater.systemizer.utils;
+package com.loserskater.appsystemizer.utils;
 
 
 import android.content.Context;
@@ -10,8 +10,8 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
-import com.loserskater.systemizer.R;
-import com.loserskater.systemizer.objects.Package;
+import com.loserskater.appsystemizer.R;
+import com.loserskater.appsystemizer.objects.Package;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "24.0.2"
     defaultConfig {
-        applicationId "com.loserskater.systemizer"
+        applicationId "com.loserskater.appsystemizer"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1

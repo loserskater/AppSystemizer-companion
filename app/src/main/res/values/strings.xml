@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Systemizer</string>
+    <string name="app_name">AppSystemizer</string>
     <string name="please_wait">Please wait</string>
     <string name="loading_packages">Loading packages</string>
 </resources>

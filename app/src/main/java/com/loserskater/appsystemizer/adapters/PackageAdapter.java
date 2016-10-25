@@ -1,4 +1,4 @@
-package com.loserskater.systemizer.adapters;
+package com.loserskater.appsystemizer.adapters;
 
 
 import android.content.Context;
@@ -12,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.l4digital.fastscroll.FastScroller;
-import com.loserskater.systemizer.R;
-import com.loserskater.systemizer.objects.Package;
-import com.loserskater.systemizer.utils.AppsManager;
+import com.loserskater.appsystemizer.R;
+import com.loserskater.appsystemizer.objects.Package;
+import com.loserskater.appsystemizer.utils.AppsManager;
 
 import java.util.ArrayList;
 

@@ -6,7 +6,7 @@
     android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.loserskater.systemizer.MainActivity"
+    tools:context="com.loserskater.appsystemizer.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <com.l4digital.fastscroll.FastScrollRecyclerView

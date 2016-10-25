@@ -1,4 +1,4 @@
-package com.loserskater.systemizer.objects;
+package com.loserskater.appsystemizer.objects;
 
 
 import java.util.Comparator;

@@ -1,4 +1,4 @@
-package com.loserskater.systemizer;
+package com.loserskater.appsystemizer;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -10,9 +10,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.l4digital.fastscroll.FastScrollRecyclerView;
 
-import com.loserskater.systemizer.adapters.PackageAdapter;
-import com.loserskater.systemizer.utils.AppsManager;
-import com.loserskater.systemizer.utils.Utils;
+import com.loserskater.appsystemizer.adapters.PackageAdapter;
+import com.loserskater.appsystemizer.utils.AppsManager;
 
 public class MainActivity extends AppCompatActivity {
 
