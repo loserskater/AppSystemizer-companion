@@ -11,13 +11,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.l4digital.fastscroll.FastScroller;
 import com.loserskater.systemizer.R;
 import com.loserskater.systemizer.objects.Package;
 import com.loserskater.systemizer.utils.AppsManager;
 
 import java.util.ArrayList;
 
-public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.ViewHolder> {
+public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.ViewHolder> implements FastScroller.SectionIndexer {
 
     private Context mContext;
     private ArrayList<Package> mDataSet;
@@ -25,6 +26,11 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.ViewHold
     public PackageAdapter(Context context, ArrayList<Package> list) {
         mContext = context;
         mDataSet = list;
+    }
+
+    @Override
+    public String getSectionText(int position) {
+        return mDataSet.get(position).getLabel().substring(0, 1).toUpperCase();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
