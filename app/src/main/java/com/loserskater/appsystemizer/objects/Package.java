@@ -7,10 +7,12 @@ public class Package {
 
     private String label;
     private String packageName;
+    private boolean enabled;
 
-    public Package(String label, String packageName) {
-        this.label = label;
+    public Package(String label, String packageName, int enabled) {
+        this.label = label.replace(" ", "").trim();
         this.packageName = packageName;
+        this.enabled = enabled == 1;
     }
 
     public String getLabel() {
@@ -27,6 +29,14 @@ public class Package {
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public static class PackageNameComparator implements Comparator<Package> {

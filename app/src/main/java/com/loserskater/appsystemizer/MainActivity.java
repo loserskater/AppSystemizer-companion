@@ -12,6 +12,7 @@ import com.l4digital.fastscroll.FastScrollRecyclerView;
 
 import com.loserskater.appsystemizer.adapters.PackageAdapter;
 import com.loserskater.appsystemizer.utils.AppsManager;
+import com.loserskater.appsystemizer.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
         new setAdapter().execute();
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
     private class setAdapter extends AsyncTask<Void, Void, Void> {
         ProgressDialog dialog;
 
@@ -54,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-//            Utils.initiateLists();
+            Utils.initiateLists();
             mAdapter = new PackageAdapter(MainActivity.this, new AppsManager(MainActivity.this).getInstalledPackages());
             return null;
         }

@@ -40,7 +40,7 @@ public class AppsManager {
             if (!isSystemPackage(resolveInfo)) {
                 String packageName = activityInfo.applicationInfo.packageName;
                 String packageLabel = getApplicationLabelByPackageName(packageName);
-                packageNames.add(new Package(packageLabel, packageName));
+                packageNames.add(new Package(packageLabel.replace(",", ""), packageName, 0));
             }
         }
 

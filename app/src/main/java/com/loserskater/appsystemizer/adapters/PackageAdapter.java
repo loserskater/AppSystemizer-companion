@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import com.l4digital.fastscroll.FastScroller;
 import com.loserskater.appsystemizer.R;
 import com.loserskater.appsystemizer.objects.Package;
 import com.loserskater.appsystemizer.utils.AppsManager;
+import com.loserskater.appsystemizer.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -33,7 +35,7 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.ViewHold
         return mDataSet.get(position).getLabel().substring(0, 1).toUpperCase();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView mTextViewLabel;
         ImageView mImageViewIcon;
         CheckBox mCheckBox;
@@ -43,13 +45,8 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.ViewHold
             mTextViewLabel = (TextView) v.findViewById(R.id.package_label);
             mImageViewIcon = (ImageView) v.findViewById(R.id.package_icon);
             mCheckBox = (CheckBox) v.findViewById(R.id.package_enabled_checkbox);
-            mCheckBox.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-
-        }
     }
 
     @Override
@@ -59,7 +56,7 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         AppsManager appsManager = new AppsManager(mContext);
 
         final String packageName = mDataSet.get(position).getPackageName();
@@ -68,6 +65,17 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.ViewHold
 
         holder.mTextViewLabel.setText(label);
         holder.mImageViewIcon.setImageDrawable(icon);
+        holder.mCheckBox.setChecked(Utils.isMatch(mDataSet.get(position)));
+        holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    Utils.addApp(mDataSet.get(position));
+                } else {
+                    Utils.removeApp(mDataSet.get(position));
+                }
+            }
+        });
     }
 
     @Override
