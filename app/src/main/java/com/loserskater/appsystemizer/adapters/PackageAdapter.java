@@ -2,6 +2,8 @@ package com.loserskater.appsystemizer.adapters;
 
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import com.l4digital.fastscroll.FastScroller;
 import com.loserskater.appsystemizer.R;
 import com.loserskater.appsystemizer.objects.Package;
 import com.loserskater.appsystemizer.utils.AppsManager;
+import com.loserskater.appsystemizer.utils.IconLoaderTask;
 import com.loserskater.appsystemizer.utils.Utils;
 
 import java.util.ArrayList;
@@ -57,22 +60,19 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        AppsManager appsManager = new AppsManager(mContext);
-
-        final String packageName = mDataSet.get(position).getPackageName();
-        Drawable icon = appsManager.getAppIconByPackageName(packageName);
-        String label = mDataSet.get(position).getLabel();
-
+        final Package mPackage = mDataSet.get(position);
+        String label = mPackage.getLabel();
         holder.mTextViewLabel.setText(label);
-        holder.mImageViewIcon.setImageDrawable(icon);
-        holder.mCheckBox.setChecked(Utils.isMatch(mDataSet.get(position)));
+        new IconLoaderTask(mContext, mContext.getPackageManager(), holder.mImageViewIcon).execute(mPackage);
+        holder.mCheckBox.setOnCheckedChangeListener(null);
+        holder.mCheckBox.setChecked(mPackage.isEnabled());
         holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
-                    Utils.addApp(mDataSet.get(position));
+                    Utils.addApp(mPackage);
                 } else {
-                    Utils.removeApp(mDataSet.get(position));
+                    Utils.removeApp(mPackage);
                 }
             }
         });

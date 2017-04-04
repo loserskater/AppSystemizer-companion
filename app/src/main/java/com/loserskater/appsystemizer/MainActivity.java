@@ -1,8 +1,10 @@
 package com.loserskater.appsystemizer;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +42,29 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        if(Utils.isAddedOrRemoved){
+            displayDialog();
+        } else {
+            finish();
+        }
+    }
+
+    private void displayDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                new Utils.runBackgroudTask().execute(Utils.COMMAND_REBOOT);
+            }
+        });
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finish();            }
+        });
+
+        builder.setMessage(R.string.reboot_desc)
+                .setTitle(R.string.reboot);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private class setAdapter extends AsyncTask<Void, Void, Void> {
@@ -60,8 +84,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Utils.initiateLists();
-            mAdapter = new PackageAdapter(MainActivity.this, new AppsManager(MainActivity.this).getInstalledPackages());
+            Utils utils = new Utils(MainActivity.this);
+            utils.initiateLists();
+            mAdapter = new PackageAdapter(MainActivity.this, new AppsManager(MainActivity.this).getPackages());
             return null;
         }
     }
