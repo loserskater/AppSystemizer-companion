@@ -9,7 +9,7 @@ public class Package {
     private String packageName;
     private boolean enabled;
 
-    public Package(String label, String packageName, int enabled) {
+    public Package(String packageName, String label, int enabled) {
         if (label != null){
             this.label = label.replace(" ", "").trim();
         }

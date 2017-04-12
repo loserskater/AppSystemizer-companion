@@ -51,12 +51,12 @@ public class AppsManager {
             if (system && isSystemPackage(packageInfo)) {
                 String packageName = packageInfo.packageName;
                 String packageLabel = packageInfo.loadLabel(pm).toString();
-                packageNames.add(new Package(packageLabel, packageName, 0));
+                packageNames.add(new Package(packageName, packageLabel, 0));
                 systemPackages = packageNames;
             } else if (!isSystemPackage(packageInfo)) {
                 String packageName = packageInfo.packageName;
                 String packageLabel = packageInfo.loadLabel(pm).toString();
-                packageNames.add(new Package(packageLabel, packageName, 0));
+                packageNames.add(new Package(packageName, packageLabel, 0));
                 installedPackages = packageNames;
             }
         }

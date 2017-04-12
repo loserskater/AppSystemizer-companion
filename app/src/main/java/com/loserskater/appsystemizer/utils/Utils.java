@@ -20,8 +20,17 @@ public class Utils {
     private static final String MODULE_DIR = "/magisk/AppSystemizer";
     private static final String MODULE_SCRIPT = MODULE_DIR + "/post-fs-data.sh";
     private static final String COMMAND_APP_LIST = "find " + MODULE_DIR + "/system/priv-app -type f";
+    private static final String INVALID_PACKAGE = "android";
+    private static final String INVALID_LABEL = "AndroidSystem";
     public static final String COMMAND_RUN_SCRIPT = "sh " + MODULE_SCRIPT;
     public static final String COMMAND_REBOOT = "reboot";
+    private static final String[] defaultList = {
+            "com.google.android.apps.nexuslauncher,NexusLauncherPrebuilt",
+            "com.google.android.apps.pixelclauncher,PixelCLauncherPrebuilt",
+            "com.actionlauncher.playstore,ActionLauncher",
+    };
+
+    public static ArrayList<Package> includedApps = new ArrayList<>();
 
     private static ArrayList<Package> addedApps;
     private static boolean addedOrRemoved = false;
@@ -29,6 +38,13 @@ public class Utils {
 
     public Utils(Context context) {
         mContext = context;
+    }
+
+    private void buildIncludedApps() {
+        for (String pkg : defaultList){
+            String[] pkgIDAndLabel = pkg.split(",");
+            includedApps.add(new Package(pkgIDAndLabel[0], pkgIDAndLabel[1], 0));
+        }
     }
 
     private void setAddedApps(ArrayList<Package> addedApps) {
@@ -43,6 +59,7 @@ public class Utils {
     }
 
     public void initiateLists() {
+        buildIncludedApps();
         generateAddedApps();
     }
 
@@ -61,7 +78,7 @@ public class Utils {
         for (Package mPackage : packages){
             for (Package systemApp : appsManager.getInstalledPackages(true)){
                 if (mPackage.getPackageName().contains(systemApp.getPackageName()) || systemApp.getPackageName().contains(mPackage.getPackageName())){
-                    finalList.add(new Package(systemApp.getLabel(), systemApp.getPackageName(), 1));
+                    finalList.add(new Package(systemApp.getPackageName(), systemApp.getLabel(), 1));
                 }
             }
         }
@@ -72,7 +89,7 @@ public class Utils {
         ArrayList<Package> newList = new ArrayList<>();
         for (String item : list) {
             String[] filename = item.split("/");
-            newList.add(new Package(null, filename[filename.length - 1], 1));
+            newList.add(new Package(filename[filename.length - 1], null, 1));
         }
         return newList;
     }
@@ -114,7 +131,16 @@ public class Utils {
             Log.d("SYSTEMIZER", "clearing and writing file");
             StringBuilder sb = new StringBuilder();
             ArrayList<Package> packages = arrayLists[0];
+            // For some reason android,AndroidSystem is getting added to the list. We don't want that.
             for (Package pkg : packages){
+                if (pkg.getPackageName().matches(INVALID_PACKAGE) || pkg.getLabel().matches(INVALID_LABEL)){
+                    continue;
+                }
+                for (Package includedPkg : includedApps){
+                    if (pkg.getPackageName().matches(includedPkg.getPackageName())){
+                        pkg.setLabel(includedPkg.getLabel());
+                    }
+                }
                 sb.append(pkg.getPackageName());
                 sb.append(",");
                 sb.append(pkg.getLabel());
