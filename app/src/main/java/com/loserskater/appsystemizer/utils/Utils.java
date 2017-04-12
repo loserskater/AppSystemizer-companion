@@ -116,6 +116,8 @@ public class Utils {
             ArrayList<Package> packages = arrayLists[0];
             for (Package pkg : packages){
                 sb.append(pkg.getPackageName());
+                sb.append(",");
+                sb.append(pkg.getLabel());
                 sb.append("\n");
             }
             try {

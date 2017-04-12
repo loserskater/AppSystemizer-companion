@@ -44,12 +44,12 @@ public class AppsManager {
                 String packageName = packageInfo.packageName;
                 String packageLabel = packageInfo.loadLabel(pm).toString();
                 packageNames.add(new Package(packageLabel, packageName, 0));
-                installedPackages = packageNames;
+                systemPackages = packageNames;
             } else if (!isSystemPackage(packageInfo)) {
                 String packageName = packageInfo.packageName;
                 String packageLabel = packageInfo.loadLabel(pm).toString();
                 packageNames.add(new Package(packageLabel, packageName, 0));
-                systemPackages = packageNames;
+                installedPackages = packageNames;
             }
         }
         return packageNames;
