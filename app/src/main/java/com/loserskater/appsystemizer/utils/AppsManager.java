@@ -24,7 +24,15 @@ public class AppsManager {
     public ArrayList<Package> getPackages(){
         Utils utils = new Utils(mContext);
         ArrayList<Package> fullList = getInstalledPackages(false);
-        fullList.addAll(utils.getAddedApps());
+        for (Package addedPkg : utils.getAddedApps()){
+            for (Package pkg : fullList){
+                if (pkg.getLabel().matches(addedPkg.getLabel())){
+                    fullList.remove(pkg);
+                    break;
+                }
+            }
+            fullList.add(addedPkg);
+        }
         Collections.sort(fullList, new Package.PackageNameComparator());
        return fullList;
     }
