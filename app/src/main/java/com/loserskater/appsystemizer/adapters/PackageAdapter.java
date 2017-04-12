@@ -2,9 +2,6 @@ package com.loserskater.appsystemizer.adapters;
 
 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +14,6 @@ import android.widget.TextView;
 import com.l4digital.fastscroll.FastScroller;
 import com.loserskater.appsystemizer.R;
 import com.loserskater.appsystemizer.objects.Package;
-import com.loserskater.appsystemizer.utils.AppsManager;
 import com.loserskater.appsystemizer.utils.IconLoaderTask;
 import com.loserskater.appsystemizer.utils.Utils;
 
@@ -63,16 +59,19 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.ViewHold
         final Package mPackage = mDataSet.get(position);
         String label = mPackage.getLabel();
         holder.mTextViewLabel.setText(label);
-        new IconLoaderTask(mContext, mContext.getPackageManager(), holder.mImageViewIcon).execute(mPackage);
+        new IconLoaderTask(mContext, holder.mImageViewIcon).execute(mPackage);
         holder.mCheckBox.setOnCheckedChangeListener(null);
         holder.mCheckBox.setChecked(mPackage.isEnabled());
         holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
+                    mPackage.setEnabled(true);
                     Utils.addApp(mPackage);
                 } else {
+                    // When removing a package we need the original package object so set enabled after removing.
                     Utils.removeApp(mPackage);
+                    mPackage.setEnabled(false);
                 }
             }
         });

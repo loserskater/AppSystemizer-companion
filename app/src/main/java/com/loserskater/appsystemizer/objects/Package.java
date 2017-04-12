@@ -10,7 +10,9 @@ public class Package {
     private boolean enabled;
 
     public Package(String label, String packageName, int enabled) {
-        this.label = label.replace(" ", "").trim();
+        if (label != null){
+            this.label = label.replace(" ", "").trim();
+        }
         this.packageName = packageName;
         this.enabled = enabled == 1;
     }

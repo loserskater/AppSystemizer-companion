@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.l4digital.fastscroll.FastScrollRecyclerView;
-
 import com.loserskater.appsystemizer.adapters.PackageAdapter;
 import com.loserskater.appsystemizer.utils.AppsManager;
 import com.loserskater.appsystemizer.utils.Utils;
@@ -20,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FastScrollRecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         new setAdapter().execute();
@@ -42,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(Utils.isAddedOrRemoved){
+        if(Utils.isAddedOrRemoved()){
+            Utils utils = new Utils(this);
+            new Utils.writeConfList(this).execute(utils.getAddedApps());
             displayDialog();
         } else {
             finish();
@@ -53,11 +53,12 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                new Utils.runBackgroudTask().execute(Utils.COMMAND_REBOOT);
+                new Utils.runBackgroundCommand().execute(Utils.COMMAND_RUN_SCRIPT + "; " + Utils.COMMAND_REBOOT);
             }
         });
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                new Utils.runBackgroundCommand().execute(Utils.COMMAND_RUN_SCRIPT);
                 finish();            }
         });
 

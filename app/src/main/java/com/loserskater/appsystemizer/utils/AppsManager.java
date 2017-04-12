@@ -2,17 +2,9 @@ package com.loserskater.appsystemizer.utils;
 
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
-import com.loserskater.appsystemizer.R;
 import com.loserskater.appsystemizer.objects.Package;
 
 import java.util.ArrayList;
@@ -30,8 +22,9 @@ public class AppsManager {
     }
 
     public ArrayList<Package> getPackages(){
+        Utils utils = new Utils(mContext);
         ArrayList<Package> fullList = getInstalledPackages(false);
-        fullList.addAll(Utils.addedApps);
+        fullList.addAll(utils.getAddedApps());
         Collections.sort(fullList, new Package.PackageNameComparator());
        return fullList;
     }
@@ -64,18 +57,6 @@ public class AppsManager {
 
     private boolean isSystemPackage(ApplicationInfo applicationInfo) {
         return ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
-    }
-
-    public  String getApplicationPackageNameByLabel(String label){
-        for (Package mPackage : getInstalledPackages(true)){
-            Log.d("TEMP", "installed: " + mPackage.getLabel());
-            Log.d("TEMP", "added label: " + label);
-            if (mPackage.getLabel().contains(label)){
-                Log.d("TEMP", "got " + mPackage.getPackageName());
-                return mPackage.getPackageName();
-            }
-        }
-        return null;
     }
 }
 

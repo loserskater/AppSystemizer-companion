@@ -5,9 +5,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.loserskater.appsystemizer.MainActivity;
 import com.loserskater.appsystemizer.objects.Package;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,35 +18,20 @@ import eu.chainfire.libsuperuser.Shell;
 public class Utils {
 
     private static final String MODULE_DIR = "/magisk/AppSystemizer";
-    private static final String COMMAND_APP_LIST = "ls " + MODULE_DIR + "/system/priv-app/";
+    private static final String MODULE_SCRIPT = MODULE_DIR + "/post-fs-data.sh";
+    private static final String COMMAND_APP_LIST = "find " + MODULE_DIR + "/system/priv-app -type f";
+    public static final String COMMAND_RUN_SCRIPT = "sh " + MODULE_SCRIPT;
     public static final String COMMAND_REBOOT = "reboot";
 
-    private static  String COMMAND_ADD_APP(String packageName, String label) {
-        return String.format("mkdir -p %s && " +
-                "cp -f %s %s", getSystemAppLocation(label), getDataAppLocation(packageName), getSystemAppLocation(label));
-    }
-
-    private static String COMMAND_REMOVE_APP(String label) {
-        return String.format("rm -rf %s", getSystemAppLocation(label));
-    }
-
-    public static ArrayList<Package> addedApps;
-    public static boolean isAddedOrRemoved = false;
+    private static ArrayList<Package> addedApps;
+    private static boolean addedOrRemoved = false;
     private Context mContext;
 
     public Utils(Context context) {
         mContext = context;
     }
 
-    private static String getDataAppLocation(String packageName) {
-        return String.format("/data/app/%s-*/base.apk", packageName);
-    }
-
-    private static String getSystemAppLocation(String label){
-        return String.format("%s/system/priv-app/%s", MODULE_DIR, label);
-    }
-
-    public void setAddedApps(ArrayList<Package> addedApps) {
+    private void setAddedApps(ArrayList<Package> addedApps) {
         Utils.addedApps = addedApps;
     }
 
@@ -73,7 +60,7 @@ public class Utils {
         ArrayList<Package> finalList = new ArrayList<>();
         for (Package mPackage : packages){
             for (Package systemApp : appsManager.getInstalledPackages(true)){
-                if (mPackage.getLabel().contains(systemApp.getLabel()) || systemApp.getLabel().contains(mPackage.getLabel())){
+                if (mPackage.getPackageName().contains(systemApp.getPackageName()) || systemApp.getPackageName().contains(mPackage.getPackageName())){
                     finalList.add(new Package(systemApp.getLabel(), systemApp.getPackageName(), 1));
                 }
             }
@@ -84,27 +71,61 @@ public class Utils {
     private ArrayList<Package> convertToPackageObject(List<String> list) {
         ArrayList<Package> newList = new ArrayList<>();
         for (String item : list) {
-            newList.add(new Package(item, null, 1));
+            String[] filename = item.split("/");
+            newList.add(new Package(null, filename[filename.length - 1], 1));
         }
         return newList;
     }
 
+    public static boolean isAddedOrRemoved(){
+        return addedOrRemoved;
+    }
+
     public static void addApp(Package aPackage) {
-        isAddedOrRemoved = true;
-        new runBackgroudTask().execute(COMMAND_ADD_APP(aPackage.getPackageName(), aPackage.getLabel()));
+        addedOrRemoved = true;
+        addedApps.add(aPackage);
     }
 
     public static void removeApp(Package aPackage) {
-        isAddedOrRemoved = true;
-        new runBackgroudTask().execute(COMMAND_REMOVE_APP(aPackage.getLabel()));
+        addedOrRemoved = true;
+        addedApps.remove(aPackage);
     }
 
-    public static class runBackgroudTask extends AsyncTask<String, Void, Void> {
+    public static class runBackgroundCommand extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {
             Log.d("SYSTEMIZER", "running: " + params[0]);
             Shell.SU.run(params);
+            return null;
+        }
+    }
+
+    public static class writeConfList extends AsyncTask<ArrayList<Package>, Void, Void>{
+
+        private Context context;
+
+        public writeConfList(Context context){
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(ArrayList<Package>... arrayLists) {
+            Log.d("SYSTEMIZER", "clearing and writing file");
+            StringBuilder sb = new StringBuilder();
+            ArrayList<Package> packages = arrayLists[0];
+            for (Package pkg : packages){
+                sb.append(pkg.getPackageName());
+                sb.append("\n");
+            }
+            try {
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("appslist.conf", Context.MODE_PRIVATE));
+                outputStreamWriter.write(sb.toString());
+                outputStreamWriter.close();
+            }
+            catch (IOException e) {
+                Log.e("Exception", "File write failed: " + e.toString());
+            }
             return null;
         }
     }

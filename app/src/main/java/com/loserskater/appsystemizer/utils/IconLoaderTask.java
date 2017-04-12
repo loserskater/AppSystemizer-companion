@@ -5,10 +5,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 
-import com.loserskater.appsystemizer.R;
 import com.loserskater.appsystemizer.objects.Package;
 
 import java.lang.ref.WeakReference;
@@ -19,13 +17,11 @@ public class IconLoaderTask extends AsyncTask<Package, Void, Drawable> {
 
 
     private Context mContext;
-    private PackageManager packageManager;
 
-    public IconLoaderTask(Context context, PackageManager pm, ImageView imageView) {
+    public IconLoaderTask(Context context, ImageView imageView) {
         mContext = context;
         // Use a WeakReference to ensure the ImageView can be garbage collected
-        imageViewReference = new WeakReference<ImageView>(imageView);
-        this.packageManager = pm;
+        imageViewReference = new WeakReference<>(imageView);
     }
 
     // Decode image in background.
