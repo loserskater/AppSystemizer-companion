@@ -39,10 +39,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        Utils utils = new Utils(this);
+        new Utils.writeConfList(this).execute(utils.getAddedApps());
+        new Utils.runBackgroundCommand().execute(Utils.COMMAND_RUN_SCRIPT);
+    }
+
+    @Override
     public void onBackPressed() {
         if(Utils.isAddedOrRemoved()){
-            Utils utils = new Utils(this);
-            new Utils.writeConfList(this).execute(utils.getAddedApps());
             displayDialog();
         } else {
             finish();
@@ -53,12 +59,11 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                new Utils.runBackgroundCommand().execute(Utils.COMMAND_RUN_SCRIPT + "; " + Utils.COMMAND_REBOOT);
+                new Utils.runBackgroundCommand().execute(Utils.COMMAND_REBOOT);
             }
         });
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                new Utils.runBackgroundCommand().execute(Utils.COMMAND_RUN_SCRIPT);
                 finish();            }
         });
 
