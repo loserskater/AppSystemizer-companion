@@ -20,8 +20,8 @@ public class Utils {
     private static final String MODULE_DIR = "/magisk/AppSystemizer";
     private static final String MODULE_SCRIPT = MODULE_DIR + "/post-fs-data.sh";
     private static final String COMMAND_APP_LIST = "find " + MODULE_DIR + "/system/priv-app -type f";
-    private static final String INVALID_PACKAGE = "android";
-    private static final String INVALID_LABEL = "AndroidSystem";
+    public static final String INVALID_PACKAGE = "android";
+    public static final String INVALID_LABEL = "AndroidSystem";
     public static final String COMMAND_RUN_SCRIPT = "sh " + MODULE_SCRIPT;
     public static final String COMMAND_REBOOT = "reboot";
     private static final String[] defaultList = {

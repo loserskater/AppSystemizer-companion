@@ -48,6 +48,9 @@ public class AppsManager {
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
         ArrayList<Package> packageNames = new ArrayList<>();
         for (ApplicationInfo packageInfo : packages) {
+            if (packageInfo.packageName.matches(Utils.INVALID_PACKAGE)){
+                continue;
+            }
             if (system && isSystemPackage(packageInfo)) {
                 String packageName = packageInfo.packageName;
                 String packageLabel = packageInfo.loadLabel(pm).toString();
