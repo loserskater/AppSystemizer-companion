@@ -17,7 +17,7 @@ import eu.chainfire.libsuperuser.Shell;
 
 public class Utils {
 
-    private static final String MODULE_DIR = "/magisk/AppSystemizer";
+    public static final String MODULE_DIR = "/magisk/AppSystemizer";
     private static final String MODULE_SCRIPT = MODULE_DIR + "/post-fs-data.sh";
     private static final String COMMAND_APP_LIST = "find " + MODULE_DIR + "/system/priv-app -type f";
     public static final String INVALID_PACKAGE = "android";
@@ -99,11 +99,13 @@ public class Utils {
     }
 
     public static void addApp(Package aPackage) {
+        Logger.log("Add app", aPackage.getLabel());
         addedOrRemoved = true;
         addedApps.add(aPackage);
     }
 
     public static void removeApp(Package aPackage) {
+        Logger.log("Remove app", aPackage.getLabel());
         addedOrRemoved = true;
         addedApps.remove(aPackage);
     }
@@ -112,7 +114,6 @@ public class Utils {
 
         @Override
         protected Void doInBackground(String... params) {
-            Log.d("SYSTEMIZER", "running: " + params[0]);
             Shell.SU.run(params);
             return null;
         }
@@ -128,7 +129,6 @@ public class Utils {
 
         @Override
         protected Void doInBackground(ArrayList<Package>... arrayLists) {
-            Log.d("SYSTEMIZER", "clearing and writing file");
             StringBuilder sb = new StringBuilder();
             ArrayList<Package> packages = arrayLists[0];
             // For some reason android,AndroidSystem is getting added to the list. We don't want that.
@@ -147,6 +147,7 @@ public class Utils {
                 sb.append("\n");
             }
             try {
+                Logger.log("Write config file", sb.toString());
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("appslist.conf", Context.MODE_PRIVATE));
                 outputStreamWriter.write(sb.toString());
                 outputStreamWriter.close();

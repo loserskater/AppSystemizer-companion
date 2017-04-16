@@ -6,4 +6,5 @@
     <string name="reboot_desc">Would you like to reboot to apply changes?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="no_root">Could not obtain root!</string>
 </resources>
