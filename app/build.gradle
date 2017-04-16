@@ -20,7 +20,7 @@ android {
         }
     }
 
-    def outputPathName = "system/app/${defaultConfig.applicationId}.apk"
+    def outputPathName = "app/${defaultConfig.applicationId}.apk"
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
