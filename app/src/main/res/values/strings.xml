@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">AppSystemizer</string>
-    <string name="please_wait">Please wait</string>
-    <string name="loading_packages">Loading packages</string>
-    <string name="reboot">Reboot</string>
-    <string name="reboot_desc">Would you like to reboot to apply changes?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-</resources>
