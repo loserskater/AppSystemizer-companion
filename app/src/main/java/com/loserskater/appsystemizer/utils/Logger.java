@@ -27,7 +27,7 @@ public class Logger {
         String sb = tag +
                 ": " +
                 input;
-        new Utils.runBackgroundCommand().execute("echo \"" + sb + "\" >> " + LOG_FILE);
+        Utils.runForegroundCommand("echo \"" + sb + "\" >> " + LOG_FILE);
     }
 
     public static void clearLog(){

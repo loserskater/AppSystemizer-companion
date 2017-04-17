@@ -50,8 +50,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Utils utils = new Utils(this);
         Logger.log("App Closed", "Writing config file and running script");
+        writeFileAndRunScript();
+    }
+
+    private void writeFileAndRunScript(){
+        Utils utils = new Utils(this);
         new Utils.writeConfList(this).execute(utils.getAddedApps());
         new Utils.runBackgroundCommand().execute(Utils.COMMAND_RUN_SCRIPT);
     }
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                writeFileAndRunScript();
                 new Utils.runBackgroundCommand().execute(Utils.COMMAND_REBOOT);
             }
         });

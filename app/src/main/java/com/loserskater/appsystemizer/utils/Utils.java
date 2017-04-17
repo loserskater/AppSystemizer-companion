@@ -110,6 +110,10 @@ public class Utils {
         addedApps.remove(aPackage);
     }
 
+    public static void runForegroundCommand(String command){
+        Shell.SU.run(command);
+    }
+
     public static class runBackgroundCommand extends AsyncTask<String, Void, Void> {
 
         @Override
