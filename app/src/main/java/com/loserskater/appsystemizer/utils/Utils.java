@@ -18,11 +18,11 @@ import eu.chainfire.libsuperuser.Shell;
 public class Utils {
 
     public static final String MODULE_DIR = "/magisk/AppSystemizer";
+    private static final String MODULE_TMP_DIR = "/dev/magisk_merge/AppSystemizer";
     private static final String MODULE_SCRIPT = MODULE_DIR + "/post-fs-data.sh";
-    private static final String COMMAND_APP_LIST = "find " + MODULE_DIR + "/system/priv-app -type f";
     public static final String INVALID_PACKAGE = "android";
     public static final String INVALID_LABEL = "AndroidSystem";
-    public static final String COMMAND_RUN_SCRIPT = "sh " + MODULE_SCRIPT;
+    public static final String COMMAND_RUN_SCRIPT = "sh " + MODULE_SCRIPT + " update";
     public static final String COMMAND_REBOOT = "reboot";
     private static final String[] defaultList = {
             "com.google.android.apps.nexuslauncher,NexusLauncherPrebuilt",
@@ -38,6 +38,10 @@ public class Utils {
 
     public Utils(Context context) {
         mContext = context;
+    }
+
+    private static String commandAppList(String dir){
+        return "find " + dir + "/system/priv-app -type f";
     }
 
     private void buildIncludedApps() {
@@ -64,8 +68,14 @@ public class Utils {
     }
 
     private void generateAddedApps() {
+        boolean tmpDirExists = Shell.SU.run("[ -e \"" + MODULE_TMP_DIR + "\" ] && echo true").get(0).trim().matches("true");
         if (Shell.SU.available()) {
-            List<String> list = Shell.SU.run(COMMAND_APP_LIST);
+            String modDir = MODULE_DIR;
+            if (tmpDirExists){
+                Logger.log("Check dir", "Using magisk_merge");
+                modDir = MODULE_TMP_DIR;
+            }
+            List<String> list = Shell.SU.run(commandAppList(modDir));
             setAddedApps(loadSystemizedApps(convertToPackageObject(list)));
         } else {
             setAddedApps(new ArrayList<Package>());
