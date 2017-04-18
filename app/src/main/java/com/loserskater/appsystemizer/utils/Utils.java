@@ -68,7 +68,7 @@ public class Utils {
     }
 
     private void generateAddedApps() {
-        boolean tmpDirExists = Shell.SU.run("[ -e \"" + MODULE_TMP_DIR + "\" ] && echo true").get(0).trim().matches("true");
+        boolean tmpDirExists = Shell.SU.run("[ -e \"" + MODULE_TMP_DIR + "\" ] && echo true || echo false").get(0).trim().matches("true");
         if (Shell.SU.available()) {
             String modDir = MODULE_DIR;
             if (tmpDirExists){
