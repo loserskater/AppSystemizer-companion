@@ -40,12 +40,12 @@ public class Utils {
         mContext = context;
     }
 
-    private static String commandAppList(String dir){
+    private static String commandAppList(String dir) {
         return "find " + dir + "/system/priv-app -type f";
     }
 
     private void buildIncludedApps() {
-        for (String pkg : defaultList){
+        for (String pkg : defaultList) {
             String[] pkgIDAndLabel = pkg.split(",");
             includedApps.add(new Package(pkgIDAndLabel[0], pkgIDAndLabel[1], 0));
         }
@@ -68,10 +68,10 @@ public class Utils {
     }
 
     private void generateAddedApps() {
-        boolean tmpDirExists = Shell.SU.run("[ -e \"" + MODULE_TMP_DIR + "\" ] && echo true || echo false").get(0).trim().matches("true");
         if (Shell.SU.available()) {
+            boolean tmpDirExists = Shell.SU.run("[ -e \"" + MODULE_TMP_DIR + "\" ] && echo true || echo false").get(0).trim().matches("true");
             String modDir = MODULE_DIR;
-            if (tmpDirExists){
+            if (tmpDirExists) {
                 Logger.log("Check dir", "Using magisk_merge");
                 modDir = MODULE_TMP_DIR;
             }
@@ -85,9 +85,9 @@ public class Utils {
     private ArrayList<Package> loadSystemizedApps(ArrayList<Package> packages) {
         AppsManager appsManager = new AppsManager(mContext);
         ArrayList<Package> finalList = new ArrayList<>();
-        for (Package mPackage : packages){
-            for (Package systemApp : appsManager.getInstalledPackages(true)){
-                if (mPackage.getPackageName().contains(systemApp.getPackageName()) || systemApp.getPackageName().contains(mPackage.getPackageName())){
+        for (Package mPackage : packages) {
+            for (Package systemApp : appsManager.getInstalledPackages(true)) {
+                if (mPackage.getPackageName().contains(systemApp.getPackageName()) || systemApp.getPackageName().contains(mPackage.getPackageName())) {
                     finalList.add(new Package(systemApp.getPackageName(), systemApp.getLabel(), 1));
                 }
             }
@@ -97,14 +97,18 @@ public class Utils {
 
     private ArrayList<Package> convertToPackageObject(List<String> list) {
         ArrayList<Package> newList = new ArrayList<>();
-        for (String item : list) {
-            String[] filename = item.split("/");
-            newList.add(new Package(filename[filename.length - 1], null, 1));
+        if (list != null) {
+            if (list.isEmpty()) {
+                for (String item : list) {
+                    String[] filename = item.split("/");
+                    newList.add(new Package(filename[filename.length - 1], null, 1));
+                }
+            }
         }
         return newList;
     }
 
-    public static boolean isAddedOrRemoved(){
+    public static boolean isAddedOrRemoved() {
         return addedOrRemoved;
     }
 
@@ -120,7 +124,7 @@ public class Utils {
         addedApps.remove(aPackage);
     }
 
-    public static void runForegroundCommand(String command){
+    public static void runForegroundCommand(String command) {
         Shell.SU.run(command);
     }
 
@@ -133,11 +137,11 @@ public class Utils {
         }
     }
 
-    public static class writeConfList extends AsyncTask<ArrayList<Package>, Void, Void>{
+    public static class writeConfList extends AsyncTask<ArrayList<Package>, Void, Void> {
 
         private Context context;
 
-        public writeConfList(Context context){
+        public writeConfList(Context context) {
             this.context = context;
         }
 
@@ -146,12 +150,12 @@ public class Utils {
             StringBuilder sb = new StringBuilder();
             ArrayList<Package> packages = arrayLists[0];
             // For some reason android,AndroidSystem is getting added to the list. We don't want that.
-            for (Package pkg : packages){
-                if (pkg.getPackageName().matches(INVALID_PACKAGE) || pkg.getLabel().matches(INVALID_LABEL)){
+            for (Package pkg : packages) {
+                if (pkg.getPackageName().matches(INVALID_PACKAGE) || pkg.getLabel().matches(INVALID_LABEL)) {
                     continue;
                 }
-                for (Package includedPkg : includedApps){
-                    if (pkg.getPackageName().matches(includedPkg.getPackageName())){
+                for (Package includedPkg : includedApps) {
+                    if (pkg.getPackageName().matches(includedPkg.getPackageName())) {
                         pkg.setLabel(includedPkg.getLabel());
                     }
                 }
@@ -165,8 +169,7 @@ public class Utils {
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("appslist.conf", Context.MODE_PRIVATE));
                 outputStreamWriter.write(sb.toString());
                 outputStreamWriter.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Log.e("Exception", "File write failed: " + e.toString());
             }
             return null;
