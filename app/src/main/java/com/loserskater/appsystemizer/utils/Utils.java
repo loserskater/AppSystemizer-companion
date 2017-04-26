@@ -98,7 +98,7 @@ public class Utils {
     private ArrayList<Package> convertToPackageObject(List<String> list) {
         ArrayList<Package> newList = new ArrayList<>();
         if (list != null) {
-            if (list.isEmpty()) {
+            if (!list.isEmpty()) {
                 for (String item : list) {
                     String[] filename = item.split("/");
                     newList.add(new Package(filename[filename.length - 1], null, 1));
