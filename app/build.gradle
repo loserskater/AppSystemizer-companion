@@ -9,8 +9,8 @@ android {
         applicationId "com.loserskater.appsystemizer"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 3
-        versionName "12.0.1"
+        versionCode 4
+        versionName "12.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
