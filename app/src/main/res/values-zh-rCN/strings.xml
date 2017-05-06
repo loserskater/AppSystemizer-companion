@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AppSystemizer</string>
+    <string name="please_wait">请等待</string>
+    <string name="loading_packages">加载应用中</string>
+    <string name="reboot">重新启动</string>
+    <string name="reboot_desc">你想要重启来应用更改吗？</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="no_root">无法获得 root 权限！</string>
+</resources>
