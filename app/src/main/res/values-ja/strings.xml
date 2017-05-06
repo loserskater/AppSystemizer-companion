@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AppSystemizer</string>
+    <string name="please_wait">お待ちください</string>
+    <string name="loading_packages">アプリを読み込み中</string>
+    <string name="reboot">再起動</string>
+    <string name="reboot_desc">変更を適用するのため再起動しますか？</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="no_root">root を取得できません！</string>
+</resources>
