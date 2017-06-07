@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.l4digital.fastscroll.FastScroller;
+import com.loserskater.appsystemizer.MainActivity;
 import com.loserskater.appsystemizer.R;
 import com.loserskater.appsystemizer.objects.Package;
 import com.loserskater.appsystemizer.utils.IconLoaderTask;
@@ -68,10 +69,12 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.ViewHold
                 if(b){
                     mPackage.setEnabled(true);
                     Utils.addApp(mPackage);
+                    ((MainActivity)mContext).showFab(true);
                 } else {
                     // When removing a package we need the original package object so set enabled after removing.
                     Utils.removeApp(mPackage);
                     mPackage.setEnabled(false);
+                    ((MainActivity)mContext).showFab(true);
                 }
             }
         });

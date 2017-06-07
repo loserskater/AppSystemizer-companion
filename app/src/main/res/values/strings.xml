@@ -7,4 +7,5 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="no_root">Could not obtain root!</string>
+    <string name="write_complete">Config file saved!</string>
 </resources>

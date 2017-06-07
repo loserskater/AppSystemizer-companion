@@ -3,4 +3,5 @@
     <color name="colorPrimary">#607D8B</color>
     <color name="colorPrimaryDark">#455A64</color>
     <color name="colorAccent">#CDDC39</color>
+    <color name="fab_ripple">#7891ff</color>
 </resources>
